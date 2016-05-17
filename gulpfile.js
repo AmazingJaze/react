@@ -23,7 +23,8 @@ var paths = {
       '!src/**/__benchmarks__/**/*.js',
       '!src/**/__tests__/**/*.js',
       '!src/**/__mocks__/**/*.js',
-      '!src/shared/vendor/**/*.js',
+      '!src/shared/vendor/**/*.js'
+      // 'src/renderers/shared/reconciler/__tests__/ReactMultiChild-test.js'
     ],
     lib: 'build/modules',
   },
@@ -49,6 +50,10 @@ whiteListNames.forEach(function(name) {
   moduleMap[name] = name;
 });
 
+// moduleMap['React'] = "./src/isomorphic/React.js";
+// moduleMap['ReactDOM'] = "./src/renderers/dom/ReactDOM.js";
+// moduleMap['ReactTestUtils'] = "./src/test/ReactTestUtils.js";
+
 moduleMap['object-assign'] = 'object-assign';
 
 var babelOpts = {
@@ -62,6 +67,7 @@ gulp.task('react:clean', function() {
 });
 
 gulp.task('react:modules', function() {
+  console.log(paths.react.lib);
   return gulp
     .src(paths.react.src)
     .pipe(babel(babelOpts))

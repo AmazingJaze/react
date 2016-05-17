@@ -73,7 +73,9 @@
     "linc": "git diff --name-only --diff-filter=ACMRTUB `git merge-base HEAD master` | grep '\\.js$' | xargs eslint --",
     "lint": "grunt lint",
     "postinstall": "node node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
-    "test": "jest"
+    "test": "jest",
+    "foo": "babel ./src/renderers/shared/reconciler/__tests__/ReactMultiChildReconcile-test.js > compiledTest.js",
+    "bar": "browserify compiledTest.js > browserTest.js"
   },
   "jest": {
     "modulePathIgnorePatterns": [

@@ -24,7 +24,13 @@ var pathToBabelPluginDev = require.resolve('fbjs-scripts/babel-6/dev-expression'
 var pathToBabelPluginModules = require.resolve('fbjs-scripts/babel-6/rewrite-modules');
 var pathToBabelrc = path.join(__dirname, '..', '..', '.babelrc');
 
+console.log("####################preprocessor.js");
+//console.log("###################MODULEMAP",  moduleMap);
+//console.log("####################REWRITEMODULES",  babelPluginModules);
+
 // TODO: make sure this stays in sync with gulpfile
+var basePath = path.dirname(pathToBabelrc);
+
 var babelOptions = {
   plugins: [
     [babelPluginModules, {
@@ -33,6 +39,9 @@ var babelOptions = {
         moduleMap,
         {
           'object-assign': 'object-assign',
+          'React' : path.join(basePath, "src/isomorphic/React.js"),
+          'ReactDOM' : path.join(basePath, "src/renderers/dom/ReactDOM.js"),
+          'ReactTestUtils' : path.join(basePath, "src/test/ReactTestUtils.js")
         }
       ),
     }],

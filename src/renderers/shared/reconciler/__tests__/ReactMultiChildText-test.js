@@ -14,6 +14,10 @@
 var React = require('React');
 var ReactDOM = require('ReactDOM');
 var ReactTestUtils = require('ReactTestUtils');
+// console.log(require.resolve('ReactDOM'));
+// console.log(require.resolve('ReactTestUtils'));
+// // console.log(require.resolve('React'));
+//throw new Error('HIHIHIHIHHHIHIHIIHIHIHIH');
 
 // Helpers
 var testAllPermutations = function(testCases) {
