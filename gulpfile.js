@@ -9,6 +9,8 @@
 
 'use strict';
 
+console.log("##################### gulpfile");
+
 var gulp = require('gulp');
 var babel = require('gulp-babel');
 var flatten = require('gulp-flatten');

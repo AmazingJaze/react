@@ -9,6 +9,8 @@
 
 'use strict';
 
+console.log("#################fbjs-scripts/babel-6/rewrite-modules");
+
 /**
  * Rewrites module string literals according to the `map` and `prefix` options.
  * This allows other npm packages to be published and used directly without
