@@ -72,28 +72,70 @@ function writeTempConfig(callback) {
 function run(done, configPath) {
   grunt.log.writeln('running jest');
 
-  var args = [
-    path.join('node_modules', 'jest-cli', 'bin', 'jest'),
-    '--runInBand',
-    '--no-watchman',
-  ];
-  if (configPath) {
-    args.push('--config', configPath);
+  // var args = [
+  //   path.join('node_modules', 'jest-cli', 'bin', 'jest'),
+  //   '--runInBand',
+  //   '--no-watchman',
+  // ];
+  // if (configPath) {
+  //   args.push('--config', configPath);
+  // }
+  // grunt.util.spawn({
+  //     cmd: 'node',
+  //   args: args,
+  //   opts: { stdio: 'inherit', env: { NODE_ENV: 'test' } },
+  // }, function(spawnErr, result, code) {
+  //   if (spawnErr) {
+  //     onError(spawnErr);
+  //   } else {
+  //     grunt.log.ok('jest passed');
+  //   }
+  //   grunt.log.writeln(result.stdout);
+
+  //   done(code === 0);
+  //});
+//const jestcli = require("jest-cli/src/cli");  
+const getJest = require('jest-cli/src/cli/getJest');
+
+  //const argv = processArgs();
+  const argv =   { 
+    _: [],
+    coverage: false,
+    onlyChanged: false,
+    o: false,
+    runInBand: true,
+    i: true,
+    version: false,
+    v: false,
+    noHighlight: false,
+    colors: false,
+    noStackTrace: false,
+    verbose: false,
+    bail: false,
+    b: false,
+    useStderr: false,
+    cache: true,
+    json: false,
+    logHeapUsage: false,
+    watchman: false,
+    silent: false,
+    '$0': 'C:\\Program Files\\nodejs\\node.EXE F:\\GitHubRepos\\react\\node_modules\\jest-cli\\bin\\jest' 
   }
-  grunt.util.spawn({
-    cmd: 'node',
-    args: args,
-    opts: { stdio: 'inherit', env: { NODE_ENV: 'test' } },
-  }, function(spawnErr, result, code) {
-    if (spawnErr) {
-      onError(spawnErr);
-    } else {
+  
+  //const root = getPackageRoot();
+  const root = "F:/GitHubRepos/react";
+  console.log("!!!!!!!!!!!!!!!!!!!!!!argv: ", argv);
+  console.log("!!!!!!!!!!!!!!!!!!!!!!root: ", root);
+  
+  getJest(root).runCLI(argv, root, success => {
+    //process.on('exit', () => process.exit(success ? 0 : 1));
+    if (success) {      
       grunt.log.ok('jest passed');
     }
-    grunt.log.writeln(result.stdout);
-
-    done(code === 0);
+    //grunt.log.writeln(result.stdout);
+    done(true);
   });
+
 }
 
 function runJestNormally() {

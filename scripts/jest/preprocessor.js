@@ -1,5 +1,7 @@
 'use strict';
 
+console.log("####################preprocessor.js");
+
 // React's test can only work in NODE_ENV=test because of how things
 // are set up. So we might as well enforce it.
 process.env.NODE_ENV = 'test';
@@ -27,8 +29,7 @@ var pathToBabelrc = path.join(__dirname, '..', '..', '.babelrc');
 // TODO: make sure this stays in sync with gulpfile
 var basePath = path.dirname(pathToBabelrc);
 
-console.log("####################preprocessor.js");
-console.log(path.join(basePath, "src/renderers/dom/ReactDOM.js"));
+//console.log(path.join(basePath, "src/renderers/dom/ReactDOM.js"));
 //console.log("###################MODULEMAP",  moduleMap);
 //console.log("####################REWRITEMODULES",  babelPluginModules);
 
@@ -51,23 +52,35 @@ var babelOptions = {
   retainLines: true,
 };
 
+let start = 0;
+let end = 0;
+var paths = [];
+
 module.exports = {
   process: function(src, filePath) {
+    
+    // if(String(filePath).includes("__tests__")){ console.log("####filePath: ", filePath);}
+    // if(String(filePath).includes("__tests__")){ console.log("####start: ", ++start);}    
+    
     if (filePath.match(/\.coffee$/)) {
+      if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
       return coffee.compile(src, {'bare': true});
     }
     if (filePath.match(/\.ts$/) && !filePath.match(/\.d\.ts$/)) {
+      if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
       return tsPreprocessor.compile(src, filePath);
     }
     if (
       !filePath.match(/\/node_modules\//) &&
       !filePath.match(/\/third_party\//)
     ) {
+      // if(String(filePath).includes("__tests__")){ console.log("####end: ", ++end);}
       return babel.transform(
         src,
         Object.assign({filename: filePath}, babelOptions)
       ).code;
     }
+    if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
     return src;
   },
 
