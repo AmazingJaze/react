@@ -63,11 +63,11 @@ module.exports = {
     // if(String(filePath).includes("__tests__")){ console.log("####start: ", ++start);}    
     
     if (filePath.match(/\.coffee$/)) {
-      if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
+      //if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
       return coffee.compile(src, {'bare': true});
     }
     if (filePath.match(/\.ts$/) && !filePath.match(/\.d\.ts$/)) {
-      if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
+      //if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
       return tsPreprocessor.compile(src, filePath);
     }
     if (
@@ -80,7 +80,7 @@ module.exports = {
         Object.assign({filename: filePath}, babelOptions)
       ).code;
     }
-    if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
+    //if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
     return src;
   },
 

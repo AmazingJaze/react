@@ -123,9 +123,8 @@ const getJest = require('jest-cli/src/cli/getJest');
   }
   
   //const root = getPackageRoot();
-  const root = "F:/GitHubRepos/react";
-  console.log("!!!!!!!!!!!!!!!!!!!!!!argv: ", argv);
-  console.log("!!!!!!!!!!!!!!!!!!!!!!root: ", root);
+  //const root = "F:/GitHubRepos/react";
+  const root = "C:/Users/Jesse/gitrepos/react";
   
   getJest(root).runCLI(argv, root, success => {
     //process.on('exit', () => process.exit(success ? 0 : 1));
