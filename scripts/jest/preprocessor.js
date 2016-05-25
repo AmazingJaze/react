@@ -42,9 +42,9 @@ var babelOptions = {
         moduleMap,
         {
           'object-assign': 'object-assign',
-          'React' : path.join(basePath, "src/isomorphic/React.js"),
-          'ReactDOM' : path.join(basePath, "src/renderers/dom/ReactDOM.js"),
-          'ReactTestUtils' : path.join(basePath, "src/test/ReactTestUtils.js")
+          // 'React' : path.join(basePath, "src/isomorphic/React.js"),
+          // 'ReactDOM' : path.join(basePath, "src/renderers/dom/ReactDOM.js"),
+          // 'ReactTestUtils' : path.join(basePath, "src/test/ReactTestUtils.js")
         }
       ),
     }],
@@ -52,35 +52,23 @@ var babelOptions = {
   retainLines: true,
 };
 
-let start = 0;
-let end = 0;
-var paths = [];
-
 module.exports = {
-  process: function(src, filePath) {
-    
-    // if(String(filePath).includes("__tests__")){ console.log("####filePath: ", filePath);}
-    // if(String(filePath).includes("__tests__")){ console.log("####start: ", ++start);}    
-    
+  process: function(src, filePath) {      
     if (filePath.match(/\.coffee$/)) {
-      //if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
       return coffee.compile(src, {'bare': true});
     }
     if (filePath.match(/\.ts$/) && !filePath.match(/\.d\.ts$/)) {
-      //if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
       return tsPreprocessor.compile(src, filePath);
     }
     if (
       !filePath.match(/\/node_modules\//) &&
       !filePath.match(/\/third_party\//)
     ) {
-      // if(String(filePath).includes("__tests__")){ console.log("####end: ", ++end);}
       return babel.transform(
         src,
         Object.assign({filename: filePath}, babelOptions)
       ).code;
     }
-    //if(String(filePath).includes("__tests__")){ paths.push(filePath); console.log(paths); }
     return src;
   },
 
