@@ -72,33 +72,35 @@ function writeTempConfig(callback) {
 function run(done, configPath) {
   grunt.log.writeln('running jest');
 
-  // var args = [
-  //   path.join('node_modules', 'jest-cli', 'bin', 'jest'),
-  //   '--runInBand',
-  //   '--no-watchman',
-  // ];
-  // if (configPath) {
-  //   args.push('--config', configPath);
-  // }
-  // grunt.util.spawn({
-  //     cmd: 'node',
-  //   args: args,
-  //   opts: { stdio: 'inherit', env: { NODE_ENV: 'test' } },
-  // }, function(spawnErr, result, code) {
-  //   if (spawnErr) {
-  //     onError(spawnErr);
-  //   } else {
-  //     grunt.log.ok('jest passed');
-  //   }
-  //   grunt.log.writeln(result.stdout);
+//   var args = [
+//     path.join('node_modules', 'jest', 'bin', 'jest'),
+//     '--runInBand',
+//     '--no-watchman',
+//   ];
+//   if (configPath) {
+//     args.push('--config', configPath);
+//   }
+//   grunt.util.spawn({
+//     cmd: 'node',
+//     args: args,
+//     opts: {
+//       stdio: 'inherit',
+//       env: Object.assign({}, process.env, {
+//         NODE_ENV: 'test',
+//       }),
+//     },
+//   }, function(spawnErr, result, code) {
+//     if (spawnErr) {
+//       onError(spawnErr);
+//     } else {
+//       grunt.log.ok('jest passed');
+//     }
+//     done(true);
+//   });
 
-  //   done(code === 0);
-  //});
-//const jestcli = require("jest-cli/src/cli");  
-const getJest = require('jest-cli/src/cli/getJest');
+  const getJest = require('jest-cli/src/cli/getJest');
 
-  //const argv = processArgs();
-  const argv =   { 
+  const argv = {
     _: [],
     coverage: false,
     onlyChanged: false,
@@ -119,19 +121,15 @@ const getJest = require('jest-cli/src/cli/getJest');
     logHeapUsage: false,
     watchman: false,
     silent: false,
-    '$0': 'C:\\Program Files\\nodejs\\node.EXE F:\\GitHubRepos\\react\\node_modules\\jest-cli\\bin\\jest' 
+    '$0': 'C:\\Program Files\\nodejs\\node.EXE F:\\GitHubRepos\\react\\node_modules\\jest-cli\\bin\\jest'
   }
-  
-  //const root = getPackageRoot();
+
   const root = "F:/GitHubRepos/react";
-  //const root = "C:/Users/Jesse/gitrepos/react";
-  
+
   getJest(root).runCLI(argv, root, success => {
-    //process.on('exit', () => process.exit(success ? 0 : 1));
-    if (success) {      
+    if (success) {
       grunt.log.ok('jest passed');
     }
-    //grunt.log.writeln(result.stdout);
     done(true);
   });
 

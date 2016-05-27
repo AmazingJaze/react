@@ -25,38 +25,28 @@ var paths = {
       '!src/**/__benchmarks__/**/*.js',
       '!src/**/__tests__/**/*.js',
       '!src/**/__mocks__/**/*.js',
-      '!src/shared/vendor/**/*.js'
-      // 'src/renderers/shared/reconciler/__tests__/ReactMultiChild-test.js'
+      '!src/renderers/art/**/*.js',
+      '!src/shared/vendor/**/*.js',
     ],
     lib: 'build/modules',
   },
 };
 
-var fbjsModuleMap = require('fbjs/module-map');
-var moduleMap = {};
-for (var key in fbjsModuleMap) {
-  moduleMap[key] = fbjsModuleMap[key];
-}
-var whiteListNames = [
-  'deepDiffer',
-  'deepFreezeAndThrowOnMutationInDev',
-  'flattenStyle',
-  'InitializeJavaScriptAppEngine',
-  'RCTEventEmitter',
-  'TextInputState',
-  'UIManager',
-  'View',
-];
-
-whiteListNames.forEach(function(name) {
-  moduleMap[name] = name;
-});
-
-// moduleMap['React'] = "./src/isomorphic/React.js";
-// moduleMap['ReactDOM'] = "./src/renderers/dom/ReactDOM.js";
-// moduleMap['ReactTestUtils'] = "./src/test/ReactTestUtils.js";
-
-moduleMap['object-assign'] = 'object-assign';
+var moduleMap = Object.assign(
+  {'object-assign': 'object-assign'},
+  require('fbjs/module-map'),
+  {
+    deepDiffer: 'react-native/lib/deepDiffer',
+    deepFreezeAndThrowOnMutationInDev: 'react-native/lib/deepFreezeAndThrowOnMutationInDev',
+    flattenStyle: 'react-native/lib/flattenStyle',
+    InitializeJavaScriptAppEngine: 'react-native/lib/InitializeJavaScriptAppEngine',
+    RCTEventEmitter: 'react-native/lib/RCTEventEmitter',
+    TextInputState: 'react-native/lib/TextInputState',
+    UIManager: 'react-native/lib/UIManager',
+    UIManagerStatTracker: 'react-native/lib/UIManagerStatTracker',
+    View: 'react-native/lib/View',
+  }
+);
 
 var babelOpts = {
   plugins: [

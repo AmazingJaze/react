@@ -13,20 +13,29 @@
 
 var DOMProperty = require('DOMProperty');
 var EventPluginRegistry = require('EventPluginRegistry');
+var ReactComponentTreeDevtool = require('ReactComponentTreeDevtool');
 
 var warning = require('warning');
 
 if (__DEV__) {
-  var cachedSource;
   var reactProps = {
     children: true,
     dangerouslySetInnerHTML: true,
     key: true,
     ref: true,
+
+    defaultValue: true,
+    valueLink: true,
+    defaultChecked: true,
+    checkedLink: true,
+    innerHTML: true,
+    suppressContentEditableWarning: true,
+    onFocusIn: true,
+    onFocusOut: true,
   };
   var warnedProperties = {};
 
-  var warnUnknownProperty = function(name) {
+  var warnUnknownProperty = function(tagName, name, debugID) {
     if (DOMProperty.properties.hasOwnProperty(name) || DOMProperty.isCustomAttribute(name)) {
       return;
     }
@@ -34,7 +43,9 @@ if (__DEV__) {
         warnedProperties.hasOwnProperty(name) && warnedProperties[name]) {
       return;
     }
-
+    if (EventPluginRegistry.registrationNameModules.hasOwnProperty(name)) {
+      return;
+    }
     warnedProperties[name] = true;
     var lowerCasedName = name.toLowerCase();
 
@@ -47,16 +58,6 @@ if (__DEV__) {
         null
     );
 
-    // For now, only warn when we have a suggested correction. This prevents
-    // logging too much when using transferPropsTo.
-    warning(
-      standardName == null,
-      'Unknown DOM property %s. Did you mean %s? %s',
-      name,
-      standardName,
-      formatSource(cachedSource)
-    );
-
     var registrationName = (
       EventPluginRegistry.possibleRegistrationNames.hasOwnProperty(
         lowerCasedName
@@ -65,36 +66,56 @@ if (__DEV__) {
       null
     );
 
-    warning(
-      registrationName == null,
-      'Unknown event handler property %s. Did you mean `%s`? %s',
-      name,
-      registrationName,
-      formatSource(cachedSource)
-    );
+    if (standardName != null) {
+      warning(
+        standardName == null,
+        'Unknown DOM property %s. Did you mean %s?%s',
+        name,
+        standardName,
+        ReactComponentTreeDevtool.getStackAddendumByID(debugID)
+      );
+    } else if (registrationName != null) {
+      warning(
+        registrationName == null,
+        'Unknown event handler property %s. Did you mean `%s`?%s',
+        name,
+        registrationName,
+        ReactComponentTreeDevtool.getStackAddendumByID(debugID)
+      );
+    } else {
+      // We were unable to guess which prop the user intended.
+      // It is likely that the user was just blindly spreading/forwarding props
+      // Components should be careful to only render valid props/attributes.
+      warning(
+        false,
+        'Unknown prop `%s` on <%s> tag. Remove this prop from the element. ' +
+        'For details, see https://fb.me/react-unknown-prop%s',
+        name,
+        tagName,
+        ReactComponentTreeDevtool.getStackAddendumByID(debugID)
+      );
+    }
   };
+}
 
-  var formatSource = function(source) {
-    return source ? `(${source.fileName.replace(/^.*[\\\/]/, '')}:${source.lineNumber})` : '';
-  };
-
+function handleElement(debugID, element) {
+  if (element == null || typeof element.type !== 'string') {
+    return;
+  }
+  if (element.type.indexOf('-') >= 0 || element.props.is) {
+    return;
+  }
+  for (var key in element.props) {
+    warnUnknownProperty(element.type, key, debugID);
+  }
 }
 
 var ReactDOMUnknownPropertyDevtool = {
-  onCreateMarkupForProperty(name, value) {
-    warnUnknownProperty(name);
+  onBeforeMountComponent(debugID, element) {
+    handleElement(debugID, element);
   },
-  onSetValueForProperty(node, name, value) {
-    warnUnknownProperty(name);
-  },
-  onDeleteValueForProperty(node, name) {
-    warnUnknownProperty(name);
-  },
-  onMountDOMComponent(debugID, element) {
-    cachedSource = element ? element._source : null;
-  },
-  onUpdateDOMComponent(debugID, element) {
-    cachedSource = element ? element._source : null;
+  onBeforeUpdateComponent(debugID, element) {
+    handleElement(debugID, element);
   },
 };
 

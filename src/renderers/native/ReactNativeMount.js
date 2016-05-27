@@ -175,7 +175,7 @@ var ReactNativeMount = {
    * @param {View} view View tree image.
    * @param {number} containerViewID View to insert sub-view into.
    */
-  _mountImageIntoNode: function(mountImage, containerID) {
+  _mountImageIntoNode: function(mountImage : number, containerID : number) {
     // Since we now know that the `mountImage` has been mounted, we can
     // mark it as such.
     var childTag = mountImage;
@@ -216,8 +216,14 @@ var ReactNativeMount = {
     if (!instance) {
       return false;
     }
+    if (__DEV__) {
+      ReactInstrumentation.debugTool.onBeginFlush();
+    }
     ReactNativeMount.unmountComponentFromNode(instance, containerTag);
     delete ReactNativeMount._instancesByContainerID[containerTag];
+    if (__DEV__) {
+      ReactInstrumentation.debugTool.onEndFlush();
+    }
     return true;
   },
 
