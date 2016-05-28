@@ -6,6 +6,9 @@
 // jest-cli/src/
 // const Test = require('jest-cli/src/Test');
 
+const useBabel = false;
+const useBrowserify = true;
+
 const fbjsModulesMap = require('fbjs/module-map');
 const createHasteMap = require('jest-cli/src/lib/createHasteMap');
 const fs = require('fs-extra');
@@ -67,9 +70,11 @@ const config =
     }
 
 const options = {
-    runInBand: true,
+    runInBand: true
     //maxWorkder: 3,
 }
+
+
 
 this._hasteMap = createHasteMap(config, {
     maxWorkers: options.runInBand ? 1 : this._opts.maxWorkers,
@@ -77,124 +82,129 @@ this._hasteMap = createHasteMap(config, {
 });
 
 this._hasteMap.build().then(hasteMap => {
-    
-    function getNewPath(filePath){      
-        // Transformed files will be placed in the browserTests directory  
-        return filePath.replace(__dirname, path.join(__dirname, 'browsertests'));                
-    }
-    
-    const modulesMap = {};
-    for( var key in hasteMap.map){
-        modulesMap[key] = getNewPath(hasteMap.map[key].g[0]);
-    }
-    for( var key in fbjsModulesMap){
-        // Collisions?
-        if(modulesMap[key]){ 
-            debugger; 
+
+        function getNewPath(filePath) {
+            // Transformed files will be placed in the browserTests directory  
+            return filePath.replace(__dirname, path.join(__dirname, 'browsertests'));
         }
-        modulesMap[key] = fbjsModulesMap[key];
-    }
 
-    /**** inlined preprocessor.js ****/
-    process.env.NODE_ENV = 'test';
-
-    var babel = require('babel-core');
-    var coffee = require('coffee-script');
-
-    var tsPreprocessor = require('./scripts/jest/ts-preprocessor.js');
-
-    var babelPluginModules = require('fbjs-scripts/babel-6/rewrite-modules');
-
-    var babelOptions = {
-        plugins: [
-            [babelPluginModules, {
-                map: Object.assign(
-                    {},
-                    modulesMap,
-                    //fbjsModulesMap,
-                    {
-                        'object-assign': 'object-assign',
-                    }
-                ),
-            }],
-        ],
-        retainLines: true,
-    };
-
-    var files = hasteMap.files;
-    
-    let counter = 0;
-    
-    Object.keys(files).forEach(filePath => {
-        //const filePath = path.resolve("./src/renderers/shared/reconciler/__tests__/ReactMultiChildText-test.js");
-        const src = fs.readFileSync(filePath, 'utf8');                           
-        
-        try {
-            
-            const extName = path.extname(filePath);
-            var transformedSrc = ((filePath, src, extName) => {
-                                                            
-                if (extName === ".coffee") {
-                //if (filePath.match(/\.coffee$/)) {
-                    return coffee.compile(src, { 'bare': true });
-                }
-                if (extName === ".ts" &&  !filePath.match(/\.d\.ts$/)) {
-                //if (filePath.match(/\.ts$/) && !filePath.match(/\.d\.ts$/)) {
-                    
-                    return tsPreprocessor.compile(src, filePath);
-                    
-                }
-                if (
-                    !filePath.match(/\/node_modules\//) &&
-                    !filePath.match(/\/third_party\//) &&
-                    extName === ".js"
-                ) {                
-                    try{
-                        counter++;
-                        return babel.transform(
-                            src,
-                            Object.assign({ filename: filePath }, babelOptions)
-                        ).code;
-                    } catch (e){
-                        console.log("ERROR in Transform: ", filePath);  
-                        throw e;
-                    }
-                }
-                return src;
-            })(filePath, src, extName);           
-            
-            // if(extName === ".ts" && !filePath.match(/\.d\.ts$/)){
-            let newPath = getNewPath(filePath);
-            
-            if (extName == '.json') {
-                console.log(filePath);
-                fs.copySync(filePath, newPath);
-            } else {
-                // Change .ts and .coffee extension to .js extension
-                newPath = path.join(path.dirname(newPath), path.basename(newPath, extName) + '.js');
-                fs.outputFileSync(newPath, transformedSrc, "utf8");
+        const modulesMap = {};
+        for (var key in hasteMap.map) {
+            modulesMap[key] = getNewPath(hasteMap.map[key].g[0]);
+        }
+        for (var key in fbjsModulesMap) {
+            // Collisions?
+            if (modulesMap[key]) {
+                debugger;
             }
-            // }
-        
-        } catch(e) {
-            console.log("ERROR: ", filePath);         
-            // TODO Bubble Errors   
-        }   
-                                   
-    });
+            modulesMap[key] = fbjsModulesMap[key];
+        }
+
+    if (useBabel) {
+
+        /**** inlined preprocessor.js ****/
+        process.env.NODE_ENV = 'test';
+
+        var babel = require('babel-core');
+        var coffee = require('coffee-script');
+
+        var tsPreprocessor = require('./scripts/jest/ts-preprocessor.js');
+
+        var babelPluginModules = require('fbjs-scripts/babel-6/rewrite-modules');
+
+        var babelOptions = {
+            plugins: [
+                [babelPluginModules, {
+                    map: Object.assign(
+                        {},
+                        modulesMap,
+                        //fbjsModulesMap,
+                        {
+                            'object-assign': 'object-assign',
+                        }
+                    ),
+                }],
+            ],
+            retainLines: true,
+        };
+
+        var files = hasteMap.files;
+
+        let counter = 0;
+
+        Object.keys(files).forEach(filePath => {
+            //const filePath = path.resolve("./src/renderers/shared/reconciler/__tests__/ReactMultiChildText-test.js");
+            const src = fs.readFileSync(filePath, 'utf8');
+
+            try {
+
+                const extName = path.extname(filePath);
+                var transformedSrc = ((filePath, src, extName) => {
+
+                    if (extName === ".coffee") {
+                        //if (filePath.match(/\.coffee$/)) {
+                        return coffee.compile(src, { 'bare': true });
+                    }
+                    if (extName === ".ts" && !filePath.match(/\.d\.ts$/)) {
+                        //if (filePath.match(/\.ts$/) && !filePath.match(/\.d\.ts$/)) {
+
+                        return tsPreprocessor.compile(src, filePath);
+
+                    }
+                    if (
+                        !filePath.match(/\/node_modules\//) &&
+                        !filePath.match(/\/third_party\//) &&
+                        extName === ".js"
+                    ) {
+                        try {
+                            counter++;
+                            return babel.transform(
+                                src,
+                                Object.assign({ filename: filePath }, babelOptions)
+                            ).code;
+                        } catch (e) {
+                            console.log("ERROR in Transform: ", filePath);
+                            throw e;
+                        }
+                    }
+                    return src;
+                })(filePath, src, extName);
+
+                // if(extName === ".ts" && !filePath.match(/\.d\.ts$/)){
+                let newPath = getNewPath(filePath);
+
+                if (extName == '.json') {
+                    console.log(filePath);
+                    fs.copySync(filePath, newPath);
+                } else {
+                    // Change .ts and .coffee extension to .js extension
+                    newPath = path.join(path.dirname(newPath), path.basename(newPath, extName) + '.js');
+                    fs.outputFileSync(newPath, transformedSrc, "utf8");
+                }
+                // }
+
+            } catch (e) {
+                console.log("ERROR: ", filePath);
+                // TODO Bubble Errors   
+            }
+
+        });
+
+        console.log(counter);
+
+    }
     
-    console.log(counter);
-    debugger;
-    
-    // Browserify
-    var browserify = require('browserify');
-    var b = browserify();
-    //"F:\GitHubRepos\react\browsertests\src\renderers\shared\reconciler\__tests__\ReactMultiChildText-test.js"
-    b.add("./browsertests/src/renderers/shared/reconciler/__tests__/ReactMultiChildText-test.js");
-    b.bundle((err, buff) => {
-        debugger;
-        modulesMap;
-        fs.writeFileSync("browserTest.js", buff);    
-        console.log("DONE");
-    });            
+    if(useBrowserify){
+
+        // Browserify
+        var browserify = require('browserify');
+        var b = browserify();
+        b.add("./browsertests/src/renderers/art/__tests__/ReactART-test.js");
+        b.add("./browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
+        b.bundle((err, buff) => {
+            modulesMap;
+            fs.writeFileSync("browserTest.js", buff);
+            console.log("Browserify DONE");
+        });
+    }
 });
