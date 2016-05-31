@@ -6,7 +6,7 @@
 // jest-cli/src/
 // const Test = require('jest-cli/src/Test');
 
-const useBabel = false;
+const useBabel = true;
 const useBrowserify = true;
 
 const fbjsModulesMap = require('fbjs/module-map');
@@ -83,22 +83,37 @@ this._hasteMap = createHasteMap(config, {
 
 this._hasteMap.build().then(hasteMap => {
 
-        function getNewPath(filePath) {
-            // Transformed files will be placed in the browserTests directory  
-            return filePath.replace(__dirname, path.join(__dirname, 'browsertests'));
-        }
+    function getNewPath(filePath) {
+        // Transformed files will be placed in the browserTests directory  
+        return filePath.replace(__dirname, path.join(__dirname, 'browsertests'));
+    }
 
-        const modulesMap = {};
-        for (var key in hasteMap.map) {
-            modulesMap[key] = getNewPath(hasteMap.map[key].g[0]);
+    const modulesMap = Object.assign(
+        fbjsModulesMap,
+        { 'object-assign': 'object-assign' },
+        {   // copied from the gulpfile
+            deepDiffer: 'react-native/lib/deepDiffer',
+            deepFreezeAndThrowOnMutationInDev: 'react-native/lib/deepFreezeAndThrowOnMutationInDev',
+            flattenStyle: 'react-native/lib/flattenStyle',
+            InitializeJavaScriptAppEngine: 'react-native/lib/InitializeJavaScriptAppEngine',
+            RCTEventEmitter: 'react-native/lib/RCTEventEmitter',
+            TextInputState: 'react-native/lib/TextInputState',
+            UIManager: 'react-native/lib/UIManager',
+            UIManagerStatTracker: 'react-native/lib/UIManagerStatTracker',
+            View: 'react-native/lib/View',
         }
-        for (var key in fbjsModulesMap) {
-            // Collisions?
-            if (modulesMap[key]) {
-                debugger;
-            }
-            modulesMap[key] = fbjsModulesMap[key];
-        }
+    );
+
+    for (var key in hasteMap.map) {
+        modulesMap[key] = getNewPath(hasteMap.map[key].g[0]);
+    }
+    // for (var key in fbjsModulesMap) {
+    //     // Collisions?
+    //     if (modulesMap[key]) {
+    //         debugger;
+    //     }
+    //     modulesMap[key] = fbjsModulesMap[key];
+    // }
 
     if (useBabel) {
 
@@ -117,22 +132,22 @@ this._hasteMap.build().then(hasteMap => {
                 [babelPluginModules, {
                     map: Object.assign(
                         {},
-                        modulesMap,
+                        modulesMap
                         //fbjsModulesMap,
-                        {
-                            'object-assign': 'object-assign',
-                        }
+                        // {
+                        //     'object-assign': 'object-assign',
+                        // }
                     ),
                 }],
             ],
             retainLines: true,
         };
 
-        var files = hasteMap.files;
+        var filesMap = hasteMap.files;
 
         let counter = 0;
-
-        Object.keys(files).forEach(filePath => {
+        var transpiledFilePaths = [];
+        Object.keys(filesMap).forEach(filePath => {
             //const filePath = path.resolve("./src/renderers/shared/reconciler/__tests__/ReactMultiChildText-test.js");
             const src = fs.readFileSync(filePath, 'utf8');
 
@@ -170,18 +185,19 @@ this._hasteMap.build().then(hasteMap => {
                     return src;
                 })(filePath, src, extName);
 
-                // if(extName === ".ts" && !filePath.match(/\.d\.ts$/)){
                 let newPath = getNewPath(filePath);
 
                 if (extName == '.json') {
                     console.log(filePath);
                     fs.copySync(filePath, newPath);
-                } else {
-                    // Change .ts and .coffee extension to .js extension
+                    transpiledFilePaths.push(newPath);
+                } else if (!newPath.includes("d.ts")) {
+                    // Make sure to change .ts and .coffee extensions to .js extension
                     newPath = path.join(path.dirname(newPath), path.basename(newPath, extName) + '.js');
                     fs.outputFileSync(newPath, transformedSrc, "utf8");
+                    transpiledFilePaths.push(newPath);
                 }
-                // }
+
 
             } catch (e) {
                 console.log("ERROR: ", filePath);
@@ -191,20 +207,50 @@ this._hasteMap.build().then(hasteMap => {
         });
 
         console.log(counter);
-
     }
-    
-    if(useBrowserify){
 
+    if (useBrowserify) {
+        console.log("Starting Browserify");
         // Browserify
-        var browserify = require('browserify');
-        var b = browserify();
-        b.add("./browsertests/src/renderers/art/__tests__/ReactART-test.js");
-        b.add("./browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
-        b.bundle((err, buff) => {
-            modulesMap;
-            fs.writeFileSync("browserTest.js", buff);
-            console.log("Browserify DONE");
+
+        transpiledFilePaths.forEach(filePath => {
+
+            var browserify = require('browserify');
+            var b = browserify();
+            b.add(filePath);
+            (function bundle(filePath) {
+                b.bundle((err, buff) => {
+                    filePath;
+                    modulesMap;
+                    if (!!err) {
+                        debugger;
+                    }
+                    // fs.writeFileSync("browserTest.js", buff);
+                    // console.log("Browserify DONE");
+                });
+            })(filePath);
+
         });
+
+        // For 1 and 2 //
+        //var browserify = require('browserify');
+        //var b = browserify();
+
+        // 2
+        // transpiledFilePaths.forEach(filePath => {
+        //     b.add(filePath);
+        // });
+
+        // 1
+        //b.add("./browsertests/src/renderers/art/__tests__/ReactART-test.js");
+        //b.add("./browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
+        // b.bundle((err, buff) => {
+        //     modulesMap;
+        //     if (!!err) {
+        //         debugger;
+        //     }
+        //     fs.writeFileSync("browserTest.js", buff);
+        //     console.log("Browserify DONE");
+        // });
     }
 });
