@@ -89,7 +89,7 @@ this._hasteMap.build().then(hasteMap => {
 
     function getNewPath(filePath) {
         // Transformed files will be placed in the browserTests directory  
-        return filePath.replace(__dirname, path.join(__dirname, 'browsertests'));
+        return filePath.replace(basePath, path.join(basePath, 'browsertests\\bin'));
     }
 
     const modulesMap = Object.assign(
@@ -127,7 +127,7 @@ this._hasteMap.build().then(hasteMap => {
         var babel = require('babel-core');
         var coffee = require('coffee-script');
 
-        var tsPreprocessor = require('./scripts/jest/ts-preprocessor.js');
+        var tsPreprocessor = require('../scripts/jest/ts-preprocessor.js');
 
         var babelPluginModules = require('fbjs-scripts/babel-6/rewrite-modules');
 
@@ -152,7 +152,6 @@ this._hasteMap.build().then(hasteMap => {
         let babelCounter = 0;
         var transpiledFilePaths = [];
         Object.keys(filesMap).forEach(filePath => {
-            //const filePath = path.resolve("./src/renderers/shared/reconciler/__tests__/ReactMultiChildText-test.js");
             const src = fs.readFileSync(filePath, 'utf8');
 
             try {
@@ -221,23 +220,23 @@ this._hasteMap.build().then(hasteMap => {
         
         // Set of files which currently fail to browserify.
         var knownErrorsMap = {
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\createReactNativeComponentClass.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\NativeMethodsMixin.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNative.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeAttributePayload.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeBaseComponent.js': 'Cannot find module \'react-native/lib/deepDiffer\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeBridgeEventPlugin.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeComponentEnvironment.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeDOMIDOperations.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeDefaultInjection.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeGlobalResponderHandler.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeMount.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeTextComponent.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\__mocks__\\View.js': 'Cannot find module \'react-native/lib/deepDiffer\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\__tests__\\ReactNativeAttributePayload-test.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\__tests__\\ReactNativeMount-test.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\isomorphic\\modern\\class\\__tests__\\ReactCoffeeScriptClass-test.js': 'Cannot find module \'ReactDOM\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\isomorphic\\modern\\class\\__tests__\'',
-            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\shared\\devtools\\__tests__\\ReactComponentTreeDevtool-test.native.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\''
+            '\\browsertests\\bin\\src\\renderers\\native\\createReactNativeComponentClass.js': 'Cannot find module \'react-native/lib/flattenStyle',
+            '\\browsertests\\bin\\src\\renderers\\native\\NativeMethodsMixin.js': 'Cannot find module \'react-native/lib/flattenStyle',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNative.js': 'Cannot find module \'react-native/lib/UIManager',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeAttributePayload.js': 'Cannot find module \'react-native/lib/flattenStyle',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeBaseComponent.js': 'Cannot find module \'react-native/lib/deepDiffer',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeBridgeEventPlugin.js': 'Cannot find module \'react-native/lib/UIManager',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeComponentEnvironment.js': 'Cannot find module \'react-native/lib/UIManager',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeDOMIDOperations.js': 'Cannot find module \'react-native/lib/UIManager',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeDefaultInjection.js': 'Cannot find module \'react-native/lib/UIManager' ,
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeGlobalResponderHandler.js': 'Cannot find module \'react-native/lib/UIManager' ,
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeMount.js': 'Cannot find module \'react-native/lib/UIManager',
+            '\\browsertests\\bin\\src\\renderers\\native\\ReactNativeTextComponent.js': 'Cannot find module \'react-native/lib/UIManager',
+            '\\browsertests\\bin\\src\\renderers\\native\\__mocks__\\View.js': 'Cannot find module \'react-native/lib/deepDiffer',
+            '\\browsertests\\bin\\src\\renderers\\native\\__tests__\\ReactNativeAttributePayload-test.js': 'Cannot find module \'react-native/lib/flattenStyle',
+            '\\browsertests\\bin\\src\\renderers\\native\\__tests__\\ReactNativeMount-test.js': 'Cannot find module \'react-native/lib/UIManager',
+            '\\browsertests\\bin\\src\\isomorphic\\modern\\class\\__tests__\\ReactCoffeeScriptClass-test.js': 'Cannot find module \'ReactDOM',
+            '\\browsertests\\bin\\src\\renderers\\shared\\devtools\\__tests__\\ReactComponentTreeDevtool-test.native.js': 'Cannot find module \'react-native/lib/UIManager'
         }
 
         console.log("Starting Browserify");
@@ -314,7 +313,7 @@ this._hasteMap.build().then(hasteMap => {
         //2
         var filesBundled = 0;
         transpiledFilePaths.forEach(filePath => {
-            if (!knownErrorsMap[filePath]) {
+            if (!knownErrorsMap[filePath.replace(basePath, "")]) {
                 ++filesBundled;
                 b.add(filePath);                
             }
@@ -330,9 +329,9 @@ this._hasteMap.build().then(hasteMap => {
         });
 
         //1
-        // b.add("./browsertests/src/renderers/art/__tests__/ReactART-test.js");
-        // b.add("./browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
-        // b.add("./browsertests/src/renderers/native/ReactNativeComponentEnvironment.js");        
+        // b.add("../browsertests/src/renderers/art/__tests__/ReactART-test.js");
+        // b.add("../browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
+        // b.add("../browsertests/src/renderers/native/ReactNativeComponentEnvironment.js");        
         // b.bundle((err, buff) => {
         //     modulesMap;
         //     if (!!err) {

@@ -25,7 +25,5 @@ chrome-user-data
 *.sublime-workspace
 .idea
 *.iml
-browsertests/src
-browsertests/mocks
-browsertests/eslint-rules
-browserTest.js
+browsertests/bin
+browsertests/browserTest.js
