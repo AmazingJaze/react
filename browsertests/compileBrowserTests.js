@@ -6,6 +6,7 @@
 // jest-cli/src/
 // const Test = require('jest-cli/src/Test');
 
+const findTestFiles = false;
 const useBabel = false;
 const useBrowserify = true;
 
@@ -35,41 +36,245 @@ function getNewPath(filePath) {
 //This sets up the file finder
 var finder = require('findit')(basePath);
 
-const testsMap = {};
-let testsDirsCounter = 0;
-let testsFilesCounter = 0;
+let testsMap = {
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\addons\\__tests__": [
+        /* 35 specs, 0 failures */
+            "\\ReactComponentWithPureRenderMixin-test.js",
+            "\\ReactFragment-test.js",
+            "\\renderSubtreeIntoContainer-test.js",
+            "\\update-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\core\\__tests__": [
+        /* 6 specs, 3 failures */
+           "\\ReactErrorBoundaries-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\test\\__tests__": [
+        /* Test results aren't shown. Instead of Jasmine UI we just see a 
+        page that is entirely blank except for one "Hello World" message. */
+        // "\\reactComponentExpect-test.js",
+        // "\\ReactTestUtils-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\addons\\link\\__tests__": [
+        /* 9 specs, 0 failures */
+        "\\LinkedStateMixin-test.js",
+        "\\ReactLinkPropTypes-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\addons\\transitions\\__tests__": [
+        /* 22 specs, 2 failures */
+        "\\ReactCSSTransitionGroup-test.js",
+        "\\ReactTransitionChildMapping-test.js",
+        "\\ReactTransitionGroup-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\children\\__tests__": [
+        /* 27 specs, 0 failures */
+        "\\onlyChild-test.js",
+        "\\ReactChildren-test.js",
+        "\\sliceChildren-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\__tests__": [
+        /* 4 specs, 0 failures */
+        //"\\ReactContextValidator-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\art\\__tests__": [
+        /* 7 specs, 0 failures */
+        "\\ReactART-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\__tests__": [
+        /* 3 specs, 1 failure */
+        "\\ReactDOMProduction-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\native\\__tests__": [
+        /* Haven't been able to browserify these files. Can't run tests yet. */
+        // "\\ReactNativeAttributePayload-test.js",
+        // "\\ReactNativeMount-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\noop\\__tests__": [
+        /* 3 specs, 0 failures, however these look like Nop's */
+        "\\ReactNoop-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\__tests__": [
+        /* 27 specs, 24 failures */
+        "\\ReactDebugTool-test.js",
+        "\\ReactPerf-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\shared\\utils\\__tests__": [
+        /* 40 specs, 1 failure */
+        "\\accumulateInto-test.js",
+        "\\adler32-test.js",
+        "\\KeyEscapeUtils-test.js",
+        "\\PooledClass-test.js",
+        "\\Transaction-test.js",
+        "\\traverseAllChildren-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\class\\__tests__": [
+        /* 42 specs, 9 failures, 1 pending spec */
+        "\\ReactBind-test.js",
+        "\\ReactBindOptout-test.js",
+        "\\ReactClass-test.js",
+        "\\ReactClassMixin-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\element\\__tests__": [
+        /* 85 specs, 16 failures */
+        "\\ReactElement-test.js",
+        "\\ReactElementClone-test.js",
+        "\\ReactElementValidator-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\types\\__tests__": [
+        /* 69 specs, 0 failures */
+        "\\ReactPropTypes-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\modern\\element\\__tests__": [
+        /* 33 specs, 3 failures */
+        "\\ReactJSXElement-test.js",
+        "\\ReactJSXElementValidator-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\modern\\class\\__tests__": [
+        /* 22 specs, 2 failures */
+        "\\ReactClassEquivalence-test.js", "\\ReactCoffeeScriptClass-test.coffee",
+        "\\ReactES6Class-test.js",
+        "\\ReactTypeScriptClass-test.ts",
+        "\\setupSpecEquivalenceReporter.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\modern\\types\\__tests__": [
+        /* No specs found */
+        // "\\ReactFlowPropTypes-test.js",
+        // "\\ReactTypeScriptPropTypes-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\__tests__": [
+        /* Exception is thrown, no results reported. */
+        // "\\findDOMNode-test.js",
+        // "\\inputValueTracking-test.js",
+        // "\\ReactBrowserEventEmitter-test.js",
+        // "\\ReactDOM-test.js",
+        // "\\ReactDOMComponentTree-test.js",
+        // "\\ReactDOMIDOperations-test.js",
+        // "\\ReactDOMSVG-test.js",
+        // "\\ReactDOMTreeTraversal-test.js",
+        // "\\ReactEventIndependence-test.js",
+        // "\\ReactEventListener-test.js",
+        // "\\ReactMount-test.js",
+        // "\\ReactMountDestruction-test.js",
+        // "\\ReactRenderDocument-test.js",
+        // "\\validateDOMNesting-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\server\\__tests__": [
+        /* 15 specs, 2 failures */
+        "\\ReactServerRendering-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\shared\\__tests__": [
+        /* 143 specs, 20 failures */
+        "\\CSSProperty-test.js",
+        "\\CSSPropertyOperations-test.js",
+        "\\Danger-test.js",
+        "\\DOMPropertyOperations-test.js",
+        "\\escapeTextContentForBrowser-test.js",
+        "\\quoteAttributeValueForBrowser-test.js",
+        "\\ReactDOMComponent-test.js",
+        "\\ReactDOMDebugTool-test.js",
+        "\\ReactDOMTextComponent-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\devtools\\__tests__": [
+        /* 86 specs, 80 failures */
+        "\\ReactComponentTreeDevtool-test.js",
+        "\\ReactComponentTreeDevtool-test.native.js",
+        "\\ReactHostOperationHistoryDevtool-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\eventPlugins\\__tests__": [
+        /* 19 specs, 2 failures */
+        "\\ChangeEventPlugin-test.js",
+        "\\EnterLeaveEventPlugin-test.js",
+        "\\FallbackCompositionState-test.js",
+        "\\SelectEventPlugin-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\syntheticEvents\\__tests__": [
+        /* 30 specs, 2 failures, 1 pending spec */
+        "\\SyntheticClipboardEvent-test.js",
+        "\\SyntheticEvent-test.js",
+        "\\SyntheticKeyboardEvent-test.js",
+        "\\SyntheticWheelEvent-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\utils\\__tests__": [
+        /* Something appears to be blowing away the DOM, can't read results */
+        // "\\getEventCharCode-test.js",
+        // "\\getEventKey-test.js",
+        // "\\getNodeForCharacterOffset-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\wrappers\\__tests__": [
+        /* 122 specs, 40 failures */
+        "\\DisabledInputUtil-test.js",
+        "\\ReactDOMIframe-test.js",
+        "\\ReactDOMInput-test.js",
+        "\\ReactDOMOption-test.js",
+        "\\ReactDOMSelect-test.js",
+        "\\ReactDOMTextarea-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\stack\\event\\__tests__": [
+        /* 12 specs, 1 failure */
+        "\\EventPluginHub-test.js",
+        "\\EventPluginRegistry-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\stack\\reconciler\\__tests__": [
+        /* 184 specs, 14 failures */
+        "\\ReactChildReconciler-test.js",
+        "\\ReactComponent-test.js",
+        "\\ReactComponentLifeCycle-test.js",
+        "\\ReactCompositeComponent-test.js",
+        "\\ReactCompositeComponentDOMMinimalism-test.js",
+        "\\ReactCompositeComponentNestedState-test.js",
+        "\\ReactCompositeComponentState-test.js",
+        "\\ReactEmptyComponent-test.js",
+        "\\ReactIdentity-test.js",
+        "\\ReactMockedComponent-test.js",
+        "\\ReactMultiChild-test.js",
+        "\\ReactMultiChildReconcile-test.js",
+        "\\ReactMultiChildText-test.js",
+        "\\ReactStatelessComponent-test.js",
+        "\\ReactStateSetters-test.js",
+        "\\ReactUpdates-test.js",
+        "\\refs-destruction-test.js",
+        "\\refs-test.js"
+    ],
+    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\stack\\event\\eventPlugins\\__tests__": [
+        /* 20 specs, 4 failures */
+        "\\ResponderEventPlugin-test.js"
+    ]
+}
 
-var p = new Promise((complete) => {
-    finder.on('file', function (file) {
-        var keyWord = "__tests__";
-        var parts = file.split(keyWord);
-        if (parts.length > 1 && file.includes("react\\src")) {
-            // expect 111 matches
-            // console.log(++testsFilesCounter + ' file: ' + file);
-            let dir = parts[0] + keyWord;
-            let newDir = getNewPath(dir);
-            let testFileName = parts[1];
-            if (testsMap[newDir]) {
-                testsMap[newDir].push(testFileName);
-            } else {
-                testsMap[newDir] = [testFileName];
+var p = Promise.resolve();
+if (findTestFiles) {
+    p = p.then((complete) => {
+        let testsFilesCounter = 0;
+        finder.on('file', function (file) {
+            var keyWord = "__tests__";
+            var parts = file.split(keyWord);
+            if (parts.length > 1 && file.includes("react\\src")) {
+                // expect 111 matches
+                // console.log(++testsFilesCounter + ' file: ' + file);
+                let dir = parts[0] + keyWord;
+                let newDir = getNewPath(dir);
+                let testFileName = parts[1];
+                if (testsMap[newDir]) {
+                    testsMap[newDir].push(testFileName);
+                } else {
+                    testsMap[newDir] = [testFileName];
+                }
+
+                (counter => {
+                    setTimeout(() => {
+                        if (counter === testsFilesCounter) {
+                            // Assume there are no more files to find
+                            fs.writeFileSync("testFiles.json", JSON.stringify(testsMap));
+                            console.log("testsMap complete");
+                            complete();
+                        }
+                    }, 1000);
+                })(++testsFilesCounter);
             }
-
-            (counter => {
-                setTimeout(() => {
-                    if (counter === testsFilesCounter) {
-                        // Assume there are no more files to find
-                        fs.writeFileSync("testFiles.json", JSON.stringify(testsMap));
-                        console.log("testsMap complete");
-                        complete();
-                    }
-                }, 1000);
-            })(++testsFilesCounter);
-        }
+        });
     });
-});
+}
 p.then(() => {
-    const config =
+    const hasteConfig =
         {
             modulePathIgnorePatterns: ['\\\\.module-cache\\\\', '\\\\react\\\\build\\\\'],
             persistModuleRegistryBetweenSpecs: true,
@@ -120,9 +325,9 @@ p.then(() => {
         //maxWorkder: 3,
     }
 
-    this._hasteMap = createHasteMap(config, {
+    this._hasteMap = createHasteMap(hasteConfig, {
         maxWorkers: options.runInBand ? 1 : this._opts.maxWorkers,
-        resetCache: !config.cache,
+        resetCache: !hasteConfig.cache,
     });
 
     this._hasteMap.build().then(hasteMap => {
@@ -271,12 +476,12 @@ p.then(() => {
                 '\\browsertests\\bin\\src\\renderers\\native\\__tests__\\ReactNativeMount-test.js': 'Cannot find module \'react-native/lib/UIManager',
                 '\\browsertests\\bin\\src\\isomorphic\\modern\\class\\__tests__\\ReactCoffeeScriptClass-test.js': 'Cannot find module \'ReactDOM',
                 '\\browsertests\\bin\\src\\renderers\\shared\\devtools\\__tests__\\ReactComponentTreeDevtool-test.native.js': 'Cannot find module \'react-native/lib/UIManager'
-            }
+            };
 
             console.log("Starting Browserify");
             // Browserify
 
-            // 4 bundle every transpiled file by itself, and log errors to find files that don't bundle.
+            // 4. bundle every transpiled file by itself, and log errors to find files that don't bundle.
             // var browserify = require('browserify');
             // let total = transpiledFilePaths.length;
             // let currentIndex = 0;
@@ -320,7 +525,7 @@ p.then(() => {
             //     console.log(failingPaths);
             // });
 
-            // 3 only bundle files from testFiles.json
+            // 3. only bundle files from testsMap
             var filesBundled = 0;
             var browserify = require('browserify');
             var b = browserify();
@@ -332,22 +537,23 @@ p.then(() => {
                         && extName === ".js") {
                         ++filesBundled;
                         b.add(filePath);
+                        console.log("adding ", filePath)
                     } else {
-                        console.log("skipped bundling ", filePath)
+                        console.log("SKIPPED bundling ", filePath)
                     }
                 });
             });
-            console.log(filesBundled + " files bundled");
+            console.log("bundling " + filesBundled + " files.");
             b.bundle((err, buff) => {
                 modulesMap;
                 if (!!err) {
                     debugger;
                 }
-                fs.writeFileSync("browserTest.js", buff);
+                fs.writeFileSync("./browsertests/browserTest.js", buff);
                 console.log("Browserify DONE");
             });
 
-            //2 bundle every transpiled file.
+            // 2. bundle every transpiled file.
             // var browserify = require('browserify');
             // var b = browserify();
 
@@ -368,7 +574,7 @@ p.then(() => {
             //     console.log("Browserify DONE");
             // });
 
-            //1 bundle hardcoded file names.
+            // 1. bundle hardcoded file names.
             // var browserify = require('browserify');
             // var b = browserify();
             // b.add("../browsertests/src/renderers/art/__tests__/ReactART-test.js");
