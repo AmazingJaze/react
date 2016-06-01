@@ -16,6 +16,8 @@ const fs = require('fs-extra');
 // const mkdirp = require('mkdirp');
 const path = require('path');
 
+const Promise = require('bluebird');
+
 // const resolveNodeModule = require('jest-cli/src/lib/resolveNodeModule');
 // const utils = require('jest-util');
 // const workerFarm = require('worker-farm');
@@ -35,10 +37,12 @@ const config =
         testRunner: path.join(basePath, '\\node_modules\\jest-jasmine1\\src\\index.js'),
         testFileExtensions: ['coffee', 'js', 'ts'],
         testPathDirs:
-        [path.join(basePath, '\\eslint-rules'),
-            path.join(basePath, '\\mocks'),
+        [
+            //path.join(basePath, '\\eslint-rules'),
+            //path.join(basePath, '\\mocks'),
             path.join(basePath, '\\src'),
-            path.join(basePath, '\\node_modules\\fbjs')],
+            //path.join(basePath, '\\node_modules\\fbjs')
+        ],
         unmockedModulePathPatterns: [''],
         name: 'react-build',
         setupFiles: [path.join(basePath, '\\scripts\\jest\\environment.js')],
@@ -145,7 +149,7 @@ this._hasteMap.build().then(hasteMap => {
 
         var filesMap = hasteMap.files;
 
-        let counter = 0;
+        let babelCounter = 0;
         var transpiledFilePaths = [];
         Object.keys(filesMap).forEach(filePath => {
             //const filePath = path.resolve("./src/renderers/shared/reconciler/__tests__/ReactMultiChildText-test.js");
@@ -155,6 +159,8 @@ this._hasteMap.build().then(hasteMap => {
 
                 const extName = path.extname(filePath);
                 var transformedSrc = ((filePath, src, extName) => {
+
+                    babelCounter++;
 
                     if (extName === ".coffee") {
                         //if (filePath.match(/\.coffee$/)) {
@@ -172,7 +178,6 @@ this._hasteMap.build().then(hasteMap => {
                         extName === ".js"
                     ) {
                         try {
-                            counter++;
                             return babel.transform(
                                 src,
                                 Object.assign({ filename: filePath }, babelOptions)
@@ -206,44 +211,128 @@ this._hasteMap.build().then(hasteMap => {
 
         });
 
-        console.log(counter);
+        console.log(babelCounter + " files processed.");
     }
-
+    
     if (useBrowserify) {
+        
+        // sort to get a consistent order while debugging.
+        transpiledFilePaths.sort();
+        
+        // Set of files which currently fail to browserify.
+        var knownErrorsMap = {
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\createReactNativeComponentClass.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\NativeMethodsMixin.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNative.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeAttributePayload.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeBaseComponent.js': 'Cannot find module \'react-native/lib/deepDiffer\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeBridgeEventPlugin.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeComponentEnvironment.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeDOMIDOperations.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeDefaultInjection.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeGlobalResponderHandler.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeMount.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\ReactNativeTextComponent.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\__mocks__\\View.js': 'Cannot find module \'react-native/lib/deepDiffer\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\__tests__\\ReactNativeAttributePayload-test.js': 'Cannot find module \'react-native/lib/flattenStyle\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\\__tests__\\ReactNativeMount-test.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\isomorphic\\modern\\class\\__tests__\\ReactCoffeeScriptClass-test.js': 'Cannot find module \'ReactDOM\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\isomorphic\\modern\\class\\__tests__\'',
+            'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\shared\\devtools\\__tests__\\ReactComponentTreeDevtool-test.native.js': 'Cannot find module \'react-native/lib/UIManager\' from \'f:\\GitHubRepos\\react\\browsertests\\src\\renderers\\native\''
+        }
+
         console.log("Starting Browserify");
         // Browserify
 
-        transpiledFilePaths.forEach(filePath => {
+        // 4
+        // var browserify = require('browserify');
+        // let total = transpiledFilePaths.length;
+        // let currentIndex = 0;
+        // let passCounter = 0;
+        // let failCounter = 0;
+        // let skipCounter = 0;
+        // const failingPaths = {};
 
-            var browserify = require('browserify');
-            var b = browserify();
-            b.add(filePath);
-            (function bundle(filePath) {
-                b.bundle((err, buff) => {
-                    filePath;
-                    modulesMap;
-                    if (!!err) {
-                        debugger;
-                    }
-                    // fs.writeFileSync("browserTest.js", buff);
-                    // console.log("Browserify DONE");
-                });
-            })(filePath);
-
-        });
-
-        // For 1 and 2 //
-        //var browserify = require('browserify');
-        //var b = browserify();
-
-        // 2
-        // transpiledFilePaths.forEach(filePath => {
-        //     b.add(filePath);
+        // Promise.mapSeries(transpiledFilePaths,
+        //     (filePath, index, lengh) => {
+        //         currentIndex = index;
+        //         if (!!knownErrorsMap[filePath]) {
+        //             ++skipCounter;
+        //             console.log("skipping ", currentIndex);
+        //             return Promise.resolve();
+        //         } else {
+        //             console.log("starting ", currentIndex);
+        //             return new Promise((complete, error) => {
+        //                 var b = browserify();
+        //                 b.add(filePath);
+        //                 b.bundle((err, buff) => {
+        //                     filePath;
+        //                     modulesMap;
+        //                     if (!!err) {
+        //                         ++failCounter;
+        //                         failingPaths[filePath] = err.message;
+        //                         debugger;
+        //                     } else {
+        //                         ++passCounter;
+        //                     }
+        //                     complete();
+        //                 });
+        //             });
+        //         }
+        //     }
+        // ).then(() => {
+        //     console.log("Browserify DONE");
+        //     console.log("Pass: " + passCounter + " / " + total);
+        //     console.log("Fail: " + failCounter + " / " + total);
+        //     console.log("Skip: " + skipCounter + " / " + total);
+        //     console.log(failingPaths);
         // });
 
-        // 1
-        //b.add("./browsertests/src/renderers/art/__tests__/ReactART-test.js");
-        //b.add("./browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
+        // 3
+        // transpiledFilePaths.forEach(filePath => {
+
+        //     var browserify = require('browserify');
+        //     var b = browserify();
+        //     b.add(filePath);
+        //     (function bundle(filePath) {
+        //         b.bundle((err, buff) => {
+        //             filePath;
+        //             modulesMap;
+        //             if (!!err) {
+        //                 debugger;
+        //             }
+        //             // fs.writeFileSync("browserTest.js", buff);
+        //             // console.log("Browserify DONE");
+        //         });
+        //     })(filePath);
+
+        // });
+
+        //For 1 and 2 //
+        var browserify = require('browserify');
+        var b = browserify();
+
+        //2
+        var filesBundled = 0;
+        transpiledFilePaths.forEach(filePath => {
+            if (!knownErrorsMap[filePath]) {
+                ++filesBundled;
+                b.add(filePath);                
+            }
+        });
+        console.log(filesBundled + " files bundled");
+        b.bundle((err, buff) => {
+            modulesMap;
+            if (!!err) {
+                debugger;
+            }
+            fs.writeFileSync("browserTest.js", buff);
+            console.log("Browserify DONE");
+        });
+
+        //1
+        // b.add("./browsertests/src/renderers/art/__tests__/ReactART-test.js");
+        // b.add("./browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
+        // b.add("./browsertests/src/renderers/native/ReactNativeComponentEnvironment.js");        
         // b.bundle((err, buff) => {
         //     modulesMap;
         //     if (!!err) {

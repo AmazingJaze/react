@@ -20,8 +20,17 @@
   <script src="spec/PlayerSpec.js"></script>-->
   <script>
     var __DEV__ = true;
-    var jest = {unmock: () => {}};  
+    var jest = {
+      fn: () => {},
+      mock: () => jest,
+      resetModuleRegistry: () => {},
+      unmock: () => jest,      
+    };
+    
+    console.log("here?", document.querySelector(".jasmine-alert"));
+      
   </script>
+  
   <script src="../../browserTest.js"></script>
 
 </head>
