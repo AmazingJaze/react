@@ -7,7 +7,7 @@
 // const Test = require('jest-cli/src/Test');
 
 const findTestFiles = false;
-const useBabel = false;
+const useBabel = true;
 const useBrowserify = true;
 
 const fbjsModulesMap = require('fbjs/module-map');
@@ -285,10 +285,10 @@ p.then(() => {
             testFileExtensions: ['coffee', 'js', 'ts'],
             testPathDirs:
             [
-                //path.join(basePath, '\\eslint-rules'),
-                //path.join(basePath, '\\mocks'),
+                // path.join(basePath, '\\eslint-rules'),
+                // path.join(basePath, '\\mocks'),
                 path.join(basePath, '\\src'),
-                //path.join(basePath, '\\node_modules\\fbjs')
+                // path.join(basePath, '\\node_modules\\fbjs')
             ],
             unmockedModulePathPatterns: [''],
             name: 'react-build',

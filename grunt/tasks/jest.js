@@ -99,6 +99,7 @@ function run(done, configPath) {
 //   });
 
   const getJest = require('jest-cli/src/cli/getJest');
+  const pathToJest = path.join(rootPath,"node_modules/jest-cli/bin/jest");
 
   const argv = {
     _: [],
@@ -121,12 +122,10 @@ function run(done, configPath) {
     logHeapUsage: false,
     watchman: false,
     silent: false,
-    '$0': 'C:\\Program Files\\nodejs\\node.EXE F:\\GitHubRepos\\react\\node_modules\\jest-cli\\bin\\jest'
+    '$0': 'C:\\Program Files\\nodejs\\node.EXE ' + pathToJest
   }
 
-  const root = "F:/GitHubRepos/react";
-
-  getJest(root).runCLI(argv, root, success => {
+  getJest(rootPath).runCLI(argv, rootPath, success => {
     if (success) {
       grunt.log.ok('jest passed');
     }

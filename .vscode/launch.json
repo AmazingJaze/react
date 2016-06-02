@@ -5,8 +5,10 @@
             "name": "Launch",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/browsertests/compileBrowserTests.js",
-            "args": [],
+            "program": "${workspaceRoot}/node_modules/grunt-cli/bin/grunt",
+            "args": [
+                "test"
+            ],
             "stopOnEntry": false,
             "cwd": "${workspaceRoot}",
             "preLaunchTask": null,
