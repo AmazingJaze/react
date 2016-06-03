@@ -42,6 +42,7 @@
     "eslint-plugin-react-internal": "file:eslint-rules",
     "fbjs": "^0.8.1",
     "fbjs-scripts": "^0.6.0",
+    "findit": "^2.0.0",
     "flow-bin": "^0.24.0",
     "fs-extra": "^0.30.0",
     "glob": "^6.0.1",

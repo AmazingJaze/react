@@ -7,7 +7,7 @@
 // const Test = require('jest-cli/src/Test');
 
 const findTestFiles = false;
-const useBabel = true;
+const useBabel = false;
 const useBrowserify = true;
 
 const fbjsModulesMap = require('fbjs/module-map');
@@ -37,67 +37,67 @@ function getNewPath(filePath) {
 var finder = require('findit')(basePath);
 
 let testsMap = {
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\addons\\__tests__": [
+    "\\browsertests\\bin\\src\\addons\\__tests__": [
         /* 35 specs, 0 failures */
-            "\\ReactComponentWithPureRenderMixin-test.js",
-            "\\ReactFragment-test.js",
-            "\\renderSubtreeIntoContainer-test.js",
-            "\\update-test.js"
+        "\\ReactComponentWithPureRenderMixin-test.js",
+        "\\ReactFragment-test.js",
+        "\\renderSubtreeIntoContainer-test.js",
+        "\\update-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\core\\__tests__": [
+    "\\browsertests\\bin\\src\\core\\__tests__": [
         /* 6 specs, 3 failures */
-           "\\ReactErrorBoundaries-test.js"
+        "\\ReactErrorBoundaries-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\test\\__tests__": [
+    "\\browsertests\\bin\\src\\test\\__tests__": [
         /* Test results aren't shown. Instead of Jasmine UI we just see a 
         page that is entirely blank except for one "Hello World" message. */
         // "\\reactComponentExpect-test.js",
         // "\\ReactTestUtils-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\addons\\link\\__tests__": [
+    "\\browsertests\\bin\\src\\addons\\link\\__tests__": [
         /* 9 specs, 0 failures */
         "\\LinkedStateMixin-test.js",
         "\\ReactLinkPropTypes-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\addons\\transitions\\__tests__": [
+    "\\browsertests\\bin\\src\\addons\\transitions\\__tests__": [
         /* 22 specs, 2 failures */
         "\\ReactCSSTransitionGroup-test.js",
         "\\ReactTransitionChildMapping-test.js",
         "\\ReactTransitionGroup-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\children\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\children\\__tests__": [
         /* 27 specs, 0 failures */
         "\\onlyChild-test.js",
         "\\ReactChildren-test.js",
         "\\sliceChildren-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\classic\\__tests__": [
         /* 4 specs, 0 failures */
         //"\\ReactContextValidator-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\art\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\art\\__tests__": [
         /* 7 specs, 0 failures */
         "\\ReactART-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\__tests__": [
         /* 3 specs, 1 failure */
         "\\ReactDOMProduction-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\native\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\native\\__tests__": [
         /* Haven't been able to browserify these files. Can't run tests yet. */
         // "\\ReactNativeAttributePayload-test.js",
         // "\\ReactNativeMount-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\noop\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\noop\\__tests__": [
         /* 3 specs, 0 failures, however these look like Nop's */
         "\\ReactNoop-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\shared\\__tests__": [
         /* 27 specs, 24 failures */
         "\\ReactDebugTool-test.js",
         "\\ReactPerf-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\shared\\utils\\__tests__": [
+    "\\browsertests\\bin\\src\\shared\\utils\\__tests__": [
         /* 40 specs, 1 failure */
         "\\accumulateInto-test.js",
         "\\adler32-test.js",
@@ -106,41 +106,41 @@ let testsMap = {
         "\\Transaction-test.js",
         "\\traverseAllChildren-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\class\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\classic\\class\\__tests__": [
         /* 42 specs, 9 failures, 1 pending spec */
         "\\ReactBind-test.js",
         "\\ReactBindOptout-test.js",
         "\\ReactClass-test.js",
         "\\ReactClassMixin-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\element\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\classic\\element\\__tests__": [
         /* 85 specs, 16 failures */
         "\\ReactElement-test.js",
         "\\ReactElementClone-test.js",
         "\\ReactElementValidator-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\classic\\types\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\classic\\types\\__tests__": [
         /* 69 specs, 0 failures */
         "\\ReactPropTypes-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\modern\\element\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\modern\\element\\__tests__": [
         /* 33 specs, 3 failures */
         "\\ReactJSXElement-test.js",
         "\\ReactJSXElementValidator-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\modern\\class\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\modern\\class\\__tests__": [
         /* 22 specs, 2 failures */
         "\\ReactClassEquivalence-test.js", "\\ReactCoffeeScriptClass-test.coffee",
         "\\ReactES6Class-test.js",
         "\\ReactTypeScriptClass-test.ts",
         "\\setupSpecEquivalenceReporter.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\isomorphic\\modern\\types\\__tests__": [
+    "\\browsertests\\bin\\src\\isomorphic\\modern\\types\\__tests__": [
         /* No specs found */
         // "\\ReactFlowPropTypes-test.js",
         // "\\ReactTypeScriptPropTypes-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\client\\__tests__": [
         /* Exception is thrown, no results reported. */
         // "\\findDOMNode-test.js",
         // "\\inputValueTracking-test.js",
@@ -157,11 +157,11 @@ let testsMap = {
         // "\\ReactRenderDocument-test.js",
         // "\\validateDOMNesting-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\server\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\server\\__tests__": [
         /* 15 specs, 2 failures */
         "\\ReactServerRendering-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\shared\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\shared\\__tests__": [
         /* 143 specs, 20 failures */
         "\\CSSProperty-test.js",
         "\\CSSPropertyOperations-test.js",
@@ -173,33 +173,33 @@ let testsMap = {
         "\\ReactDOMDebugTool-test.js",
         "\\ReactDOMTextComponent-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\devtools\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\shared\\devtools\\__tests__": [
         /* 86 specs, 80 failures */
         "\\ReactComponentTreeDevtool-test.js",
         "\\ReactComponentTreeDevtool-test.native.js",
         "\\ReactHostOperationHistoryDevtool-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\eventPlugins\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\client\\eventPlugins\\__tests__": [
         /* 19 specs, 2 failures */
         "\\ChangeEventPlugin-test.js",
         "\\EnterLeaveEventPlugin-test.js",
         "\\FallbackCompositionState-test.js",
         "\\SelectEventPlugin-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\syntheticEvents\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\client\\syntheticEvents\\__tests__": [
         /* 30 specs, 2 failures, 1 pending spec */
         "\\SyntheticClipboardEvent-test.js",
         "\\SyntheticEvent-test.js",
         "\\SyntheticKeyboardEvent-test.js",
         "\\SyntheticWheelEvent-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\utils\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\client\\utils\\__tests__": [
         /* Something appears to be blowing away the DOM, can't read results */
         // "\\getEventCharCode-test.js",
         // "\\getEventKey-test.js",
         // "\\getNodeForCharacterOffset-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\dom\\client\\wrappers\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\dom\\client\\wrappers\\__tests__": [
         /* 122 specs, 40 failures */
         "\\DisabledInputUtil-test.js",
         "\\ReactDOMIframe-test.js",
@@ -208,12 +208,12 @@ let testsMap = {
         "\\ReactDOMSelect-test.js",
         "\\ReactDOMTextarea-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\stack\\event\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\shared\\stack\\event\\__tests__": [
         /* 12 specs, 1 failure */
         "\\EventPluginHub-test.js",
         "\\EventPluginRegistry-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\stack\\reconciler\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\shared\\stack\\reconciler\\__tests__": [
         /* 184 specs, 14 failures */
         "\\ReactChildReconciler-test.js",
         "\\ReactComponent-test.js",
@@ -234,7 +234,7 @@ let testsMap = {
         "\\refs-destruction-test.js",
         "\\refs-test.js"
     ],
-    "c:\\Users\\Jesse\\gitrepos\\react\\browsertests\\bin\\src\\renderers\\shared\\stack\\event\\eventPlugins\\__tests__": [
+    "\\browsertests\\bin\\src\\renderers\\shared\\stack\\event\\eventPlugins\\__tests__": [
         /* 20 specs, 4 failures */
         "\\ResponderEventPlugin-test.js"
     ]
@@ -529,20 +529,22 @@ p.then(() => {
             var filesBundled = 0;
             var browserify = require('browserify');
             var b = browserify();
-            Object.keys(testsMap).forEach(testsDirectoryPath => {
-                testsMap[testsDirectoryPath].forEach(testFileName => {
-                    const filePath = testsDirectoryPath + testFileName;
-                    const extName = path.extname(filePath);
-                    if (!knownErrorsMap[filePath.replace(basePath, "")]
-                        && extName === ".js") {
-                        ++filesBundled;
-                        b.add(filePath);
-                        console.log("adding ", filePath)
-                    } else {
-                        console.log("SKIPPED bundling ", filePath)
-                    }
+            Object.keys(testsMap)
+                .forEach(testDirectoryPaths => {
+                    testsMap[testDirectoryPaths].forEach(fileName => {
+                        const partialPath = path.join(testDirectoryPaths, fileName);
+                        const fullPath = path.join(basePath, partialPath);
+                        const extName = path.extname(fullPath);
+                        if (!knownErrorsMap[partialPath]
+                            && extName === ".js") {
+                            ++filesBundled;
+                            b.add(fullPath);
+                            console.log("adding ", fullPath)
+                        } else {
+                            console.log("SKIPPED bundling ", fullPath)
+                        }
+                    });
                 });
-            });
             console.log("bundling " + filesBundled + " files.");
             b.bundle((err, buff) => {
                 modulesMap;
