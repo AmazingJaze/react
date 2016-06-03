@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Jasmine Spec Runner v2.4.1</title>
@@ -21,19 +22,113 @@
   <script>
     var __DEV__ = true;
     var jest = {
-      fn: () => {},
+      fn: x => {
+        x || (x = () => {});
+        x.mock = { 'calls': [], 'instances': [] }; 
+        x._isMockFunction = true;
+        return x;
+      },
+      //genMockFromModule: () => jest,
       mock: () => jest,
-      resetModuleRegistry: () => {},
-      setMock: () => {},
+      resetModuleRegistry: () => jest,
+      runAllTimers: () => jest,
+      setMock: () => jest,
       unmock: () => jest,      
-    };    
+    };
+    
+    jest.mock.calls = [];
+    jest.mock.instances = [];    
+    
+    function isSpyLike(test) {
+      return test.calls && test.calls.all !== undefined;
+    }
+
+    function isMockLike(test) {
+      return test.mock !== undefined;
+    }
+    
+    const hasIterator = object => !!(object != null && object[Symbol.iterator]);
+    const iterableEquality = (a, b) => {
+      if (
+        typeof a !== 'object' ||
+        typeof b !== 'object' ||
+        Array.isArray(a) ||
+        Array.isArray(b) ||
+        !hasIterator(a) ||
+        !hasIterator(b)
+      ) {
+        return undefined;
+      }
+      if (a.constructor !== b.constructor) {
+        return false;
+      }
+      const bIterator = b[Symbol.iterator]();
+
+      for (var aValue of a) {
+        const nextB = bIterator.next();
+        if (
+          nextB.done ||
+          !jasmine.matchersUtil.equals(
+            aValue,
+            nextB.value,
+            [iterableEquality]
+          )
+        ) {
+          return false;
+        }
+      }
+      if (!bIterator.next().done) {
+        return false;
+      }
+      return true;
+    };
+    
+    const env = jasmine.getEnv();
+    env.beforeEach(() => {
+    
+      jasmine.addCustomEqualityTester(iterableEquality);
       
+      jasmine.addMatchers({
+        toBeCalled: () => ({
+          compare: (actual, expected) => {
+            if (expected) {
+              throw Error(
+                'toBeCalled() does not accept parameters, use ' +
+                'toBeCalledWith instead.'
+              );
+            }
+            const isSpy = isSpyLike(actual);
+            if (!isSpy && !isMockLike(actual)) {
+              throw Error(
+                'toBeCalled() should be used on a mock function or ' +
+                'a jasmine spy.'
+              );
+            }
+            const calls = isSpy
+              ? actual.calls.all().map(x => x.args)
+              : actual.mock.calls;
+            const pass = calls.length !== 0;
+            const message = (
+              pass ?
+              'Expected not to be called' :
+              'Expected to be called at least once'
+            );
+            return {
+              pass,
+              message,
+            };
+          },
+        }),
+      });
+          
+    });
   </script>
-  
+
   <script src="../browserTest.js"></script>
 
 </head>
 
 <body>
 </body>
+
 </html>
