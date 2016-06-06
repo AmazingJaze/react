@@ -351,13 +351,6 @@ p.then(() => {
         for (var key in hasteMap.map) {
             modulesMap[key] = getNewPath(hasteMap.map[key].g[0]);
         }
-        // for (var key in fbjsModulesMap) {
-        //     // Collisions?
-        //     if (modulesMap[key]) {
-        //         debugger;
-        //     }
-        //     modulesMap[key] = fbjsModulesMap[key];
-        // }
 
         if (useBabel) {
 
@@ -526,34 +519,34 @@ p.then(() => {
             // });
 
             // 3. only bundle files from testsMap
-            var filesBundled = 0;
-            var browserify = require('browserify');
-            var b = browserify();
-            Object.keys(testsMap)
-                .forEach(testDirectoryPaths => {
-                    testsMap[testDirectoryPaths].forEach(fileName => {
-                        const partialPath = path.join(testDirectoryPaths, fileName);
-                        const fullPath = path.join(basePath, partialPath);
-                        const extName = path.extname(fullPath);
-                        if (!knownErrorsMap[partialPath]
-                            && extName === ".js") {
-                            ++filesBundled;
-                            b.add(fullPath);
-                            console.log("adding ", fullPath)
-                        } else {
-                            console.log("SKIPPED bundling ", fullPath)
-                        }
-                    });
-                });
-            console.log("bundling " + filesBundled + " files.");
-            b.bundle((err, buff) => {
-                modulesMap;
-                if (!!err) {
-                    debugger;
-                }
-                fs.writeFileSync("./browsertests/browserTest.js", buff);
-                console.log("Browserify DONE");
-            });
+            // var filesBundled = 0;
+            // var browserify = require('browserify');
+            // var b = browserify();
+            // Object.keys(testsMap)
+            //     .forEach(testDirectoryPaths => {
+            //         testsMap[testDirectoryPaths].forEach(fileName => {
+            //             const partialPath = path.join(testDirectoryPaths, fileName);
+            //             const fullPath = path.join(basePath, partialPath);
+            //             const extName = path.extname(fullPath);
+            //             if (!knownErrorsMap[partialPath]
+            //                 && extName === ".js") {
+            //                 ++filesBundled;
+            //                 b.add(fullPath);
+            //                 console.log("adding ", fullPath)
+            //             } else {
+            //                 console.log("SKIPPED bundling ", fullPath)
+            //             }
+            //         });
+            //     });
+            // console.log("bundling " + filesBundled + " files.");
+            // b.bundle((err, buff) => {
+            //     modulesMap;
+            //     if (!!err) {
+            //         debugger;
+            //     }
+            //     fs.writeFileSync("./browsertests/browserTest.js", buff);
+            //     console.log("Browserify DONE");
+            // });
 
             // 2. bundle every transpiled file.
             // var browserify = require('browserify');
@@ -572,24 +565,24 @@ p.then(() => {
             //     if (!!err) {
             //         debugger;
             //     }
-            //     fs.writeFileSync("browserTest.js", buff);
+            //     fs.writeFileSync("./browsertests/browserTest.js", buff);
             //     console.log("Browserify DONE");
             // });
 
-            // 1. bundle hardcoded file names.
-            // var browserify = require('browserify');
-            // var b = browserify();
+            //1. bundle select hardcoded file names.
+            var browserify = require('browserify');
+            var b = browserify();
             // b.add("../browsertests/src/renderers/art/__tests__/ReactART-test.js");
             // b.add("../browsertests/src/renderers/shared/stack/reconciler/__tests__/ReactMultiChildText-test.js");
-            // b.add("../browsertests/src/renderers/native/ReactNativeComponentEnvironment.js");        
-            // b.bundle((err, buff) => {
-            //     modulesMap;
-            //     if (!!err) {
-            //         debugger;
-            //     }
-            //     fs.writeFileSync("browserTest.js", buff);
-            //     console.log("Browserify DONE");
-            // });
+            b.add("./browsertests/bin/src/isomorphic/classic/class/__tests__/ReactBind-test.js");
+            b.bundle((err, buff) => {
+                modulesMap;
+                if (!!err) {
+                    debugger;
+                }
+                fs.writeFileSync("./browsertests/browserTest.js", buff);
+                console.log("Browserify DONE");
+            });
         }
     });
 });
